@@ -10,7 +10,7 @@ import PopUp from "../components/popUp/PopUp";
 import { deleteCat } from "../database/services/cats/DelectCat";
 import { initTableCats } from "../database/services/cats/InitTableCats";
 import { updateCat } from "../database/services/cats/UpdateCat";
-import { atomCats, atomSearchedCats, selectedPickerValue } from "../globalStates/store";
+import { atomCats, atomSearchedCats, atomSearchInput, searchBarVisibility, selectedPickerValue } from "../globalStates/store";
 import { styles } from "./styles";
 
 const items = [
@@ -47,6 +47,8 @@ const Home = () => {
     const [id, setID] = useState(undefined);
     const [visibleUpdatePopUp, setVisibleUpdatePopUp] = useState(false)
     const [searchedCats, setSearchedCats] = useAtom(atomSearchedCats);
+    const [visibleSearchBar, setVisibleSearchBar] = useAtom(searchBarVisibility)
+    const [searchInput, setSearchInput] = useAtom(atomSearchInput)
 
     const txtInputs = [
         {
@@ -89,6 +91,10 @@ const Home = () => {
         const catDelete = () => {
             deleteCat(id)
                 .then(result => console.log(result))
+                .then(() => {
+                    setSearchInput(undefined)
+                    setVisibleSearchBar(false)
+                })
                 .catch(error => console.log(error))
         }
     }
@@ -120,6 +126,8 @@ const Home = () => {
             .then((result) => {
                 console.log(result)
                 setVisibleUpdatePopUp(false)
+                setSearchInput(undefined)
+                setVisibleSearchBar(false)
             })
             .catch(error => console.log(error))
         }
@@ -188,7 +196,7 @@ const Home = () => {
                     
                     <ScrollView>
                     {
-                        !searchedCats ?
+                        !searchInput ?
                             dispayCats()
                         : displaySearchedCats()
                     }

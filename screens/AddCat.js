@@ -7,6 +7,7 @@ import DropDownList from '../components/dropdownlist/DropDownList';
 import { addNewCat } from '../database/services/cats/AddNewCat';
 import { useAtom } from 'jotai';
 import { selectedPickerValue } from '../globalStates/store';
+import CatsCardView from '../components/informationCardView/CatsCardView';
 
 const items = [
     {
@@ -103,9 +104,20 @@ const AddCat = () => {
                 onChangeText={(desc) => setDescription(desc)}
             />
 
-            <TouchableOpacity style={{width: '35%', height: 50, backgroundColor: '#fc79eb', borderRadius: 30, alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}} onPress={addCat}>
+            <TouchableOpacity style={{width: '35%', height: 50, backgroundColor: '#fc79eb', borderRadius: 30, marginBottom: 50, alignItems: 'center', justifyContent: 'center', alignSelf: 'center'}} onPress={addCat}>
                 <Text style={{color: '#fff', fontSize: 16,}}>Submit</Text>
             </TouchableOpacity>
+
+            {
+                name ?
+                    <CatsCardView
+                        name={name}
+                        breed={breed}
+                        age={age}
+                        description={description}
+                    />
+                : null
+            }
 
         </View>
     )

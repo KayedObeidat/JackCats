@@ -7,12 +7,12 @@ import { styles } from "./styles";
 import {useState} from 'react'
 import { searchForCats } from "../../database/services/cats/SearchForCats";
 import { useAtom } from "jotai";
-import { atomSearchedCats } from "../../globalStates/store";
+import { atomSearchedCats, atomSearchInput, searchBarVisibility } from "../../globalStates/store";
 
 const Header = () => {
-    const [visible, setVisible] = useState(false)
-    const [searchItem, setSearchItem] = useState(undefined)
+    const [visible, setVisible] = useAtom(searchBarVisibility)
     const [searchedCats, setSearchedCats] = useAtom(atomSearchedCats)
+    const [searchInput, setSearchInput] = useAtom(atomSearchInput)
 
     const searchFromDB = (catName, catBreed) => {
         searchForCats(catName, catBreed)
@@ -40,7 +40,10 @@ const Header = () => {
                             style={styles.searchBar}
                             placeholderTextColor="#838584"
                             selectionColor={'#f28ae5'}
-                            onChangeText={(search) => searchFromDB(search, search) }
+                            onChangeText={(search) => {
+                                searchFromDB(search, search)
+                                setSearchInput(search)
+                            } }
                         />
                     : null
                 }
